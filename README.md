@@ -1,4 +1,4 @@
-# FyrKontrol
+# FyrKontroll
 Sends control signals to the light house over DMX512 on ESP32 using ESP-IDF.
 
 # Specs

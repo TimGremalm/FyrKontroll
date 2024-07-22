@@ -22,7 +22,7 @@ float ui_sector_width = 0.1;
 static const char *TAG = "Main";
 
 void app_main(void) {
-	ESP_LOGI(TAG, "Start FyrKontrol");
+	ESP_LOGI(TAG, "Start FyrKontroll");
 
 	esp_err_t ret = nvs_flash_init();
 	if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
