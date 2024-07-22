@@ -13,6 +13,8 @@
 #include <stdint.h>
 #include <math.h>
 
+#include "fyr_settings.h"
+
 static const char *TAG = "UI";
 
 // Pins for potentiometers
@@ -62,6 +64,8 @@ bool potAndValueMatches(float pot, float value) {
 
 void uitask(void *pvParameters) {
 	ESP_LOGI(TAG, "Start");
+	LoadSettings();
+	ESP_LOGI(TAG, "Loaded from settings light %d speed %d offset %d sector width %d", fyrsettings.light, fyrsettings.speed, fyrsettings.offset, fyrsettings.sector_width);
 
 	ESP_LOGI(TAG, "Configure ADC1");
 	adc1_config_width(ADC_WIDTH_BIT_DEFAULT);
@@ -119,6 +123,8 @@ void uitask(void *pvParameters) {
 		}
 		if (mode != mode_previous) {
 			ESP_LOGI(TAG, "Mode changed to %d", mode);
+			fyrsettings.light = 2;
+			SaveSettings();
 			mode_previous = mode;
 			mode_aligned = false;
 		}
@@ -166,7 +172,7 @@ void uitask(void *pvParameters) {
 				}
 				break;
 			case MODE_NONE:
-				ESP_LOGI(TAG, "Mode None should not be able to exist.");
+				// ESP_LOGI(TAG, "Mode None should not be able to exist.");
 				gpio_set_level(LED_LEFT_PIN, 0);
 				gpio_set_level(LED_RIGHT_PIN, 0);
 		}

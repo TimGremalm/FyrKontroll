@@ -11,6 +11,7 @@
 #include "dmx.h"
 #include "controller.h"
 #include "ui.h"
+#include "fyr_settings.h"
 
 // Init global variable
 uint8_t dmx_data[513];
@@ -18,11 +19,13 @@ float ui_light = 0.5;
 float ui_speed = 0.7;
 float ui_offset = 0.0;
 float ui_sector_width = 0.1;
+fyrsettings_t fyrsettings;
 
 static const char *TAG = "Main";
 
 void app_main(void) {
 	ESP_LOGI(TAG, "Start FyrKontroll");
+	ESP_LOGI(TAG, "By Tim Gremalm https://github.com/TimGremalm/FyrKontroll/");
 
 	esp_err_t ret = nvs_flash_init();
 	if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
