@@ -86,7 +86,16 @@ void uitask(void *pvParameters) {
 	ESP_LOGI(TAG, "Start");
 	ESP_LOGI(TAG, "Load settings from NVS flash.");
 	LoadSettings();
+	ui_light = fyrsettings.light;
+	ui_speed = fyrsettings.speed;
+	ui_offset = fyrsettings.offset;
+	ui_sector_width = fyrsettings.sector_width;
 	ESP_LOGI(TAG, "Loaded from settings light %.2f speed %.2f offset %.2f sector width %.2f", fyrsettings.light, fyrsettings.speed, fyrsettings.offset, fyrsettings.sector_width);
+
+	ESP_LOGI(TAG, "Configure ADC1");
+	adc1_config_width(ADC_WIDTH_BIT_DEFAULT);
+	adc1_config_channel_atten(POT1, ADC_ATTEN_DB_11);
+	adc1_config_channel_atten(POT2, ADC_ATTEN_DB_11);
 
 	ESP_LOGI(TAG, "Configure GPIO for encoder switch");
 	gpio_config_t io_conf = {};
@@ -150,6 +159,7 @@ void uitask(void *pvParameters) {
 				// ESP_LOGI(TAG, "Pot 1: %f Light: %f", pot1_value, ui_light);
 				if (mode_aligned) {
 					ui_light = pot1_value;
+					fyrsettings.light = ui_light;
 				} else {
 					if (potAndValueMatches(pot1_value, ui_light)) {
 						mode_aligned = true;
@@ -160,6 +170,7 @@ void uitask(void *pvParameters) {
 				// ESP_LOGI(TAG, "Pot 1: %f Speed: %f", pot1_value, ui_speed);
 				if (mode_aligned) {
 					ui_speed = pot1_value;
+					fyrsettings.speed = ui_speed;
 				} else {
 					if (potAndValueMatches(pot1_value, ui_speed)) {
 						mode_aligned = true;
@@ -170,6 +181,7 @@ void uitask(void *pvParameters) {
 				// ESP_LOGI(TAG, "Pot 1: %f Offset: %f", pot1_value, ui_offset);
 				if (mode_aligned) {
 					ui_offset = pot1_value;
+					fyrsettings.offset = ui_offset;
 				} else {
 					if (potAndValueMatches(pot1_value, ui_offset)) {
 						mode_aligned = true;
@@ -180,6 +192,7 @@ void uitask(void *pvParameters) {
 				// ESP_LOGI(TAG, "Pot 1: %f Sector Width: %f", pot1_value, ui_sector_width);
 				if (mode_aligned) {
 					ui_sector_width = pot1_value;
+					fyrsettings.sector_width = ui_sector_width;
 				} else {
 					if (potAndValueMatches(pot1_value, ui_sector_width)) {
 						mode_aligned = true;
