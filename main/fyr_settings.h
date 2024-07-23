@@ -4,10 +4,10 @@
 #include <stdint.h>
 
 typedef struct {
-	int32_t light;
-	int32_t speed;
-	int32_t offset;
-	int32_t sector_width;
+	float light;
+	float speed;
+	float offset;
+	float sector_width;
 } fyrsettings_t;
 
 extern fyrsettings_t fyrsettings;

@@ -62,15 +62,31 @@ bool potAndValueMatches(float pot, float value) {
 	}
 }
 
+void PrintModeChanged(enum SWITCHMODE mode) {
+	switch (mode) {
+		case MODE_LIGHT:
+			ESP_LOGI(TAG, "Mode changed to %d Light", mode);
+			break;
+		case MODE_SPEED:
+			ESP_LOGI(TAG, "Mode changed to %d Speed", mode);
+			break;
+		case MODE_OFFSET:
+			ESP_LOGI(TAG, "Mode changed to %d Offset", mode);
+			break;
+		case MODE_SECTOR_WIDTH:
+			ESP_LOGI(TAG, "Mode changed to %d Sector Width", mode);
+			break;
+		case MODE_NONE:
+			ESP_LOGI(TAG, "Mode changed to %d None", mode);
+			break;
+	}
+}
+
 void uitask(void *pvParameters) {
 	ESP_LOGI(TAG, "Start");
+	ESP_LOGI(TAG, "Load settings from NVS flash.");
 	LoadSettings();
-	ESP_LOGI(TAG, "Loaded from settings light %d speed %d offset %d sector width %d", fyrsettings.light, fyrsettings.speed, fyrsettings.offset, fyrsettings.sector_width);
-
-	ESP_LOGI(TAG, "Configure ADC1");
-	adc1_config_width(ADC_WIDTH_BIT_DEFAULT);
-	adc1_config_channel_atten(POT1, ADC_ATTEN_DB_11);
-	adc1_config_channel_atten(POT2, ADC_ATTEN_DB_11);
+	ESP_LOGI(TAG, "Loaded from settings light %.2f speed %.2f offset %.2f sector width %.2f", fyrsettings.light, fyrsettings.speed, fyrsettings.offset, fyrsettings.sector_width);
 
 	ESP_LOGI(TAG, "Configure GPIO for encoder switch");
 	gpio_config_t io_conf = {};
@@ -122,11 +138,10 @@ void uitask(void *pvParameters) {
 			mode = MODE_NONE;
 		}
 		if (mode != mode_previous) {
-			ESP_LOGI(TAG, "Mode changed to %d", mode);
-			fyrsettings.light = 2;
-			SaveSettings();
+			PrintModeChanged(mode);
 			mode_previous = mode;
 			mode_aligned = false;
+			SaveSettings();
 		}
 
 		// Check level
